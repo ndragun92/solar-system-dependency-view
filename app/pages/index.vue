@@ -44,8 +44,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useSolarSystem } from "../composables/useSolarSystem";
 import type { SolarSystemApiResponse } from "../../shared/utils/solar-system";
 
 const runtimeConfig = useRuntimeConfig();

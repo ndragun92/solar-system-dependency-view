@@ -1,4 +1,4 @@
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from "vue";
+import type { Ref } from "vue";
 import {
   buildPlanets,
   center,
