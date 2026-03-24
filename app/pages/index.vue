@@ -26,6 +26,7 @@
         <SolarDetailsPanel
           :watchlist-projects="watchlistProjects"
           :watchlist-max-risk="watchlistMaxRisk"
+          @open-project="handleOpenWatchlistProject"
         />
       </section>
 
@@ -86,6 +87,13 @@ const isSelectionModalOpen = ref(false);
 const handleOpenSelection = (selection: typeof selected.value) => {
   openSelection(selection);
   isSelectionModalOpen.value = true;
+};
+
+const handleOpenWatchlistProject = (projectId: string) => {
+  const planet = planets.value.find((item) => item.id === projectId);
+  if (!planet) return;
+
+  handleOpenSelection({ type: "planet", planet });
 };
 
 // Small view-model value for the KPI card section.
