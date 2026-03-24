@@ -47,8 +47,12 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    githubToken: process.env.GITHUB_TOKEN,
+    githubOwner: process.env.GITHUB_OWNER,
+    githubRepos: process.env.GITHUB_REPOS,
+    githubApiBase: process.env.GITHUB_API_BASE || "https://api.github.com",
     public: {
-      // myValue: process.env.NUXT_PUBLIC_MY_VALUE,
+      solarDataEndpoint: process.env.NUXT_PUBLIC_SOLAR_DATA_ENDPOINT || "/api/solar-system",
     },
   },
 

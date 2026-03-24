@@ -40,8 +40,22 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useSolarSystem } from "../composables/useSolarSystem";
+import type { SolarSystemApiResponse } from "../../shared/utils/solar-system";
 
-const solar = useSolarSystem();
+const runtimeConfig = useRuntimeConfig();
+const apiEndpoint =
+  (runtimeConfig.public as { solarDataEndpoint?: string }).solarDataEndpoint || "/api/solar-system";
+
+const { data } = await useFetch<SolarSystemApiResponse>(apiEndpoint, {
+  default: () => ({
+    source: "mock" as const,
+    generatedAt: new Date().toISOString(),
+    sunPackages: [],
+    repositories: [],
+  }),
+});
+
+const solar = useSolarSystem(computed(() => data.value ?? null));
 
 const {
   sunPackages,

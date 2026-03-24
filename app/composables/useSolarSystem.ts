@@ -1,11 +1,9 @@
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from "vue";
 import {
   buildPlanets,
   center,
-  generateRawPlanets,
   generateStars,
   statusPriority,
-  sunPackages,
   type Moon,
   type MoonStatus,
   type PackageSnapshot,
@@ -13,10 +11,11 @@ import {
   type Point,
   type ProjectHealth,
   type Selection,
+  type SolarSystemApiResponse,
   type UpgradeCandidate,
-} from "../utils/solar-system";
+} from "../../shared/utils/solar-system";
 
-export const useSolarSystem = () => {
+export const useSolarSystem = (sourceData: Ref<SolarSystemApiResponse | null>) => {
   const now = ref(Date.now());
   const startTime = now.value;
   const selected = ref<Selection>({ type: "sun" });
@@ -25,18 +24,33 @@ export const useSolarSystem = () => {
   let rafId = 0;
   let lastFrameTime = 0;
 
-  const rawPlanets = generateRawPlanets();
-  const planets = buildPlanets(rawPlanets);
+  const packageCatalog = computed(() => sourceData.value?.sunPackages ?? []);
+  const rawPlanets = computed(() => sourceData.value?.repositories ?? []);
+  const planets = computed(() => buildPlanets(rawPlanets.value, packageCatalog.value));
   const stars = generateStars();
 
-  const orbitAngles = ref<Record<string, number>>(
-    planets.reduce(
-      (acc, planet) => {
-        acc[planet.id] = 0;
-        return acc;
-      },
-      {} as Record<string, number>
-    )
+  const orbitAngles = ref<Record<string, number>>({});
+
+  watch(
+    planets,
+    (nextPlanets) => {
+      const nextAngles = { ...orbitAngles.value };
+
+      for (const planet of nextPlanets) {
+        if (nextAngles[planet.id] === undefined) {
+          nextAngles[planet.id] = 0;
+        }
+      }
+
+      for (const planetId of Object.keys(nextAngles)) {
+        if (!nextPlanets.some((planet) => planet.id === planetId)) {
+          delete nextAngles[planetId];
+        }
+      }
+
+      orbitAngles.value = nextAngles;
+    },
+    { immediate: true }
   );
 
   const elapsedSeconds = computed(() => (now.value - startTime) / 1000);
@@ -71,7 +85,7 @@ export const useSolarSystem = () => {
   };
 
   const allPackages = computed<PackageSnapshot[]>(() =>
-    planets.flatMap((planet) =>
+    planets.value.flatMap((planet) =>
       planet.moons.map((moon) => ({
         planetId: planet.id,
         planetName: planet.name,
@@ -89,7 +103,7 @@ export const useSolarSystem = () => {
   );
 
   const projectHealth = computed<ProjectHealth[]>(() =>
-    planets.map((planet) => {
+    planets.value.map((planet) => {
       const total = planet.moons.length;
       const major = planet.moons.filter((moon) => moon.status === "majorBehind").length;
       const minor = planet.moons.filter((moon) => moon.status === "minorBehind").length;
@@ -228,7 +242,7 @@ export const useSolarSystem = () => {
    * Focuses the details panel on the first outdated moon for a selected package.
    */
   const inspectCandidate = async (candidate: UpgradeCandidate) => {
-    for (const planet of planets) {
+    for (const planet of planets.value) {
       const foundMoon = planet.moons.find(
         (moon) => moon.name === candidate.name && moon.status !== "upToDate"
       );
@@ -270,7 +284,7 @@ export const useSolarSystem = () => {
       const deltaSeconds = (frameTime - lastFrameTime) / 1000;
       lastFrameTime = frameTime;
 
-      for (const planet of planets) {
+      for (const planet of planets.value) {
         if (isPlanetFrozen(planet)) continue;
 
         const currentAngle = orbitAngles.value[planet.id] ?? 0;
@@ -290,7 +304,7 @@ export const useSolarSystem = () => {
   });
 
   return {
-    sunPackages,
+    sunPackages: packageCatalog,
     planets,
     stars,
     center,

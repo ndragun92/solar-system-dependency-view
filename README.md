@@ -1,208 +1,63 @@
-# Nuxt 4 Starter Template
+# Solar System Dependency Dashboard (Nuxt 4)
 
-Look at the [Nuxt 4 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Interactive dependency dashboard that visualizes repositories as planets and packages as moons.
 
-Live preview version [Template](https://template-nuxt3-ndragun92.vercel.app)
+## Stack
 
-## What does this starter template contain?
+- Nuxt 4 + Nitro
+- Vue 3 + TypeScript
+- Tailwind CSS 4
 
-- Nuxt a11y module
-- Nuxt security module
-- ESLint module
-- Strict typeCheck (enabled in development)
-- Pinia
-- TailwindCSS
-- Nuxt Icons
-- Vue Use
-- Nuxt Image
-- Loaded a main scss entry file
-- Injected scss utils which are globally available
-- Works with Node 20.x
+## What it does
+
+- Loads dependency data via Nuxt server API route: `/api/solar-system`
+- Uses real GitHub repository data when GitHub env config is provided
+- Falls back to deterministic mocked data when GitHub config/token is missing
+- Renders repository/package status and risk insights in a solar-system UI
+
+## Project structure (important parts)
+
+- `app/pages/index.vue` — page-level `useFetch` and UI composition
+- `app/composables/useSolarSystem.ts` — client-side view-model/state logic (no fetching)
+- `server/api/solar-system.get.ts` — Nitro API route for GitHub fetching + mock fallback
+- `shared/utils/*` — shared types and utility logic for app + server
+
+## Environment variables
+
+See `.env.example`.
+
+Required for live GitHub mode:
+
+- `GITHUB_TOKEN`
+- `GITHUB_OWNER`
+- `GITHUB_REPOS` (comma-separated)
+
+Optional:
+
+- `GITHUB_API_BASE` (default: `https://api.github.com`)
+- `NUXT_PUBLIC_SOLAR_DATA_ENDPOINT` (default: `/api/solar-system`)
+
+If required GitHub variables are missing, server route returns mocked payload automatically.
 
 ## Setup
 
-Make sure to install the dependencies:
+1. Install dependencies
+2. Copy `.env.example` to `.env`
+3. (Optional) Fill GitHub variables for live data
+4. Run development server
 
-```bash
-# npm
-npm install
-```
+## Scripts
 
-## Development Server
+- `npm run dev` — start local dev server
+- `npm run build` — production build
+- `npm run preview` — preview production build
+- `npm run typecheck` — Nuxt type checks
+- `npm run lint` — ESLint
 
-Start the development server on http://localhost:3000
+## Data flow
 
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-## Project Structure
-
-```
-app/
-├── assets/        # Static assets (CSS, images, fonts)
-│   └── css/
-│       └── main.css      # Main stylesheet with Tailwind imports
-├── components/    # Reusable Vue components
-├── layouts/       # Layout components
-│   ├── default.vue
-│   └── error.vue
-├── pages/         # Route pages (auto-generated routes)
-│   └── index.vue
-├── plugins/       # Nuxt plugins
-│   └── init.ts    # App initialization plugin
-├── store/         # Pinia stores
-│   └── exampleStore.ts
-├── app.vue        # Root component
-└── error.vue      # Error handling component
-
-public/           # Static files served as-is (favicon, etc.)
-server/           # Server-side code and API routes
-```
-
-## Configuration
-
-### Environment Variables
-
-Copy `.env.example` to `.env.local` and configure as needed:
-
-```bash
-# Cache settings (optional)
-# VITE_CACHE_ENABLED=true
-```
-
-### TypeScript Configuration
-
-The project uses strict type checking in development mode. TypeScript files are validated during:
-
-- Development (active checking)
-- Build time (enforced checking)
-
-To disable strict checking, modify `nuxt.config.ts`:
-
-```typescript
-typescript: {
-  typeCheck: "build",
-  strict: false, // Disable strict mode
-}
-```
-
-### ESLint & Prettier
-
-Format and lint your code:
-
-```bash
-# Check for linting issues
-npm run lint
-
-# Fix linting issues
-npm run eslint:fix
-
-# Check formatting
-npm run lint:prettier
-
-# Fix formatting
-npm run prettier:fix
-
-# Fix all issues at once
-npm run lint:fix
-```
-
-## Development Tips
-
-### Creating Components
-
-Place reusable components in `app/components/`:
-
-```vue
-<template>
-  <div>Your component</div>
-</template>
-
-<script setup lang="ts">
-// Component logic here
-</script>
-```
-
-Components are automatically imported when referenced.
-
-### Creating Store
-
-Create new stores in `app/store/`:
-
-```typescript
-import { defineStore } from "pinia";
-
-export const useMyStore = defineStore("my-store", () => {
-  const state = ref("");
-
-  const setState = (value: string) => {
-    state.value = value;
-  };
-
-  return { state, setState };
-});
-```
-
-Use in components:
-
-```typescript
-const store = useMyStore();
-```
-
-### Creating Pages
-
-Add new pages in `app/pages/`:
-
-- `index.vue` → `/`
-- `about.vue` → `/about`
-- `users/[id].vue` → `/users/:id`
-
-Pages are automatically routed based on file structure.
-
-## Troubleshooting
-
-### Port Already in Use
-
-If port 3000 is already in use, Nuxt will automatically try the next available port.
-
-### TypeScript Errors
-
-Run `npm run typecheck` to validate all TypeScript files without building.
-
-### ESLint Warnings
-
-Some rules are intentionally relaxed for flexibility. To adjust:
-
-1. Edit `eslint.config.mjs`
-2. Run `npm run eslint:fix` to apply changes
-
-## Performance Features
-
-This template includes several performance optimizations:
-
-- Lazy hydration for non-critical components
-- Automatic route prefetching
-- Static data prerendering
-- Build caching
-- Image optimization with Nuxt Image
-
-## Browser Support
-
-See [Baseline Browser Mapping](https://github.com/web-platform-dx/baseline-browser-mapping) for browser support details.
+1. `index.vue` calls `useFetch('/api/solar-system')`
+2. Nitro route fetches GitHub repository `package.json` files (if configured)
+3. Route normalizes dependency versions and builds API response
+4. Route returns mocked data if GitHub config is missing or request fails
+5. `useSolarSystem` transforms fetched response into chart-friendly computed data

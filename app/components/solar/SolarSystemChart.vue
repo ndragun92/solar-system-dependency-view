@@ -100,7 +100,7 @@ import {
   type Point,
   type Selection,
   type Star,
-} from "../../utils/solar-system";
+} from "../../../shared/utils/solar-system";
 
 defineProps<{
   planets: Planet[];

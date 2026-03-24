@@ -152,7 +152,7 @@ import {
   type Selection,
   type SunPackage,
   type UpgradeCandidate,
-} from "../../utils/solar-system";
+} from "../../../shared/utils/solar-system";
 
 const props = defineProps<{
   selected: Selection;
