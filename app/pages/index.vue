@@ -9,7 +9,7 @@
         :fleet-health-score="fleetHealthScore"
       />
 
-      <SolarDependencyAlertTicker :items="marqueeItemsLoop" @open-selection="openSelection" />
+      <SolarDependencyAlertTicker :items="marqueeItemsLoop" @open-selection="handleOpenSelection" />
 
       <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <SolarSystemChart
@@ -18,27 +18,30 @@
           :center="center"
           :planet-position="planetPosition"
           :moon-position="moonPosition"
-          @open-selection="openSelection"
+          @open-selection="handleOpenSelection"
           @pointer-move="handlePointerMove"
           @pointer-leave="handlePointerLeave"
         />
 
         <SolarDetailsPanel
-          :selected="selected"
-          :selected-title="selectedTitle"
-          :sun-packages="sunPackages"
           :watchlist-projects="watchlistProjects"
           :watchlist-max-risk="watchlistMaxRisk"
-          :upgrade-candidates="upgradeCandidates"
-          @inspect-candidate="inspectCandidate"
         />
       </section>
+
+      <SolarSelectionModal
+        :is-open="isSelectionModalOpen"
+        :selected="selected"
+        :selected-title="selectedTitle"
+        :sun-packages="sunPackages"
+        @close="isSelectionModalOpen = false"
+      />
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useSolarSystem } from "../composables/useSolarSystem";
 import type { SolarSystemApiResponse } from "../../shared/utils/solar-system";
 
@@ -70,15 +73,20 @@ const {
   fleetHealthScore,
   watchlistProjects,
   watchlistMaxRisk,
-  upgradeCandidates,
   marqueeItemsLoop,
   planetPosition,
   moonPosition,
   openSelection,
-  inspectCandidate,
   handlePointerMove,
   handlePointerLeave,
 } = solar;
+
+const isSelectionModalOpen = ref(false);
+
+const handleOpenSelection = (selection: typeof selected.value) => {
+  openSelection(selection);
+  isSelectionModalOpen.value = true;
+};
 
 // Small view-model value for the KPI card section.
 const reposAffected = computed(
