@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SolarSystemApiResponse } from "../../shared/utils/solar-system";
+import type { SolarSystemApiResponse } from "#shared/utils/solar-system";
 
 const runtimeConfig = useRuntimeConfig();
 const apiEndpoint =

@@ -98,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { type Selection, type SunPackage } from "../../../shared/utils/solar-system";
+import type { Selection, SunPackage } from "#shared/utils/solar-system";
 
 defineProps<{
   isOpen: boolean;

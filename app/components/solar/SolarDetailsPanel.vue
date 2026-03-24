@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { type ProjectHealth } from "../../../shared/utils/solar-system";
+import { type ProjectHealth } from "#shared/utils/solar-system";
 
 defineProps<{
   watchlistProjects: ProjectHealth[];

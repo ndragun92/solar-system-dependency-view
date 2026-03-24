@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { type Selection } from "../../../shared/utils/solar-system";
+import { type Selection } from "#shared/utils/solar-system";
 
 defineProps<{
   items: {

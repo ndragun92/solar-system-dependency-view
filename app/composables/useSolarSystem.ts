@@ -13,7 +13,7 @@ import {
   type Selection,
   type SolarSystemApiResponse,
   type UpgradeCandidate,
-} from "../../shared/utils/solar-system";
+} from "#shared/utils/solar-system";
 
 type AlertTickerItem = {
   id: string;

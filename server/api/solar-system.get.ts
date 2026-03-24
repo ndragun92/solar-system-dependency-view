@@ -1,11 +1,11 @@
-import { SOLAR_SYSTEM_CONFIG } from "../../shared/utils/config";
+import { SOLAR_SYSTEM_CONFIG } from "#shared/utils/config";
 import {
   generateRawPlanets,
   sunPackages,
   type RawPlanet,
   type SolarSystemApiResponse,
   type SunPackage,
-} from "../../shared/utils/solar-system";
+} from "#shared/utils/solar-system";
 
 type GitHubRepo = {
   id: number;
