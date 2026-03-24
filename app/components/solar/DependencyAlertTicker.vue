@@ -1,7 +1,7 @@
 <template>
   <section class="fixed bottom-0 left-0 right-0 w-full">
     <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-2">
-      <p class="text-xs uppercase tracking-[0.16em] text-slate-400 opacity-0">Dependency alert</p>
+      <p class="text-xs uppercase tracking-widest text-slate-400 opacity-0">Dependency alert</p>
       <div class="hidden items-center gap-2 md:flex bg-slate-900/70 pr-4">
         <span class="inline-flex items-center gap-1 text-xs text-rose-300">
           <span class="inline-block h-2 w-2 rounded-full bg-rose-400" /> Major
@@ -15,8 +15,10 @@
       </div>
     </div>
 
-    <div class="ticker mt-2">
-      <div class="ticker-track">
+    <div class="group mt-2 overflow-hidden whitespace-nowrap">
+      <div
+        class="inline-flex min-w-max gap-2.5 pe-2.5 animate-ticker-scroll group-hover:animation-paused"
+      >
         <button
           v-for="(item, index) in items"
           :key="`${item.id}-${index}`"
@@ -52,31 +54,3 @@ const emit = defineEmits<{
   (event: "open-selection", payload: Selection): void;
 }>();
 </script>
-
-<style scoped>
-.ticker {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.ticker-track {
-  display: inline-flex;
-  min-width: max-content;
-  gap: 0.65rem;
-  padding-inline-end: 0.65rem;
-  animation: ticker-scroll 48s linear infinite;
-}
-
-.ticker:hover .ticker-track {
-  animation-play-state: paused;
-}
-
-@keyframes ticker-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-</style>

@@ -1,10 +1,10 @@
 <template>
   <aside
-    class="h-fit max-h-[75vh] overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur"
+    class="h-fit max-h-screen overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/70 p-5 backdrop-blur"
   >
     <div>
       <div class="mb-3 flex items-center justify-between">
-        <p class="text-xs uppercase tracking-[0.16em] text-slate-400">Repository watchlist</p>
+        <p class="text-xs uppercase tracking-widest text-slate-400">Repository watchlist</p>
         <span class="text-xs text-slate-500">highest risk first</span>
       </div>
 
@@ -31,7 +31,7 @@
               />
             </div>
 
-            <p class="mt-1 text-[11px] text-slate-400">
+            <p class="mt-1 text-xs text-slate-400">
               {{ item.major }} major · {{ item.minor }} minor · {{ item.patch }} patch
             </p>
           </button>

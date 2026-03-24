@@ -13,7 +13,7 @@
       >
         <div class="mb-4 flex items-start justify-between gap-4 border-b border-slate-800 pb-3">
           <div>
-            <p class="text-xs uppercase tracking-[0.18em] text-slate-400">{{ selected.type }}</p>
+            <p class="text-xs uppercase tracking-widest text-slate-400">{{ selected.type }}</p>
             <h2 class="mt-1 text-xl font-semibold text-white">{{ selectedTitle }}</h2>
           </div>
 
@@ -26,7 +26,7 @@
           </button>
         </div>
 
-        <div class="max-h-[65vh] space-y-3 overflow-y-auto text-sm text-slate-200">
+        <div class="max-h-screen space-y-3 overflow-y-auto text-sm text-slate-200">
           <template v-if="selected.type === 'sun'">
             <p class="text-slate-300">Available npm packages (latest versions)</p>
             <ul class="space-y-2">

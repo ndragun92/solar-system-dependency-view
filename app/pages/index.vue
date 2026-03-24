@@ -11,8 +11,9 @@
 
       <SolarDependencyAlertTicker :items="marqueeItemsLoop" @open-selection="handleOpenSelection" />
 
-      <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <section class="grid gap-6 lg:grid-cols-12">
         <SolarSystemChart
+          class="lg:col-span-8"
           :planets="planets"
           :stars="stars"
           :center="center"
@@ -24,6 +25,7 @@
         />
 
         <SolarDetailsPanel
+          class="lg:col-span-4"
           :watchlist-projects="watchlistProjects"
           :watchlist-max-risk="watchlistMaxRisk"
           @open-project="handleOpenWatchlistProject"

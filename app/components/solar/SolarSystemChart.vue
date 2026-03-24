@@ -48,12 +48,12 @@
       />
 
       <g class="cursor-pointer" @click="$emit('open-selection', { type: 'sun' })">
-        <circle :cx="center" :cy="center" r="58" fill="url(#sunGradient)" class="sun-glow" />
+        <circle :cx="center" :cy="center" r="58" fill="url(#sunGradient)" class="drop-shadow-2xl" />
         <text
           :x="center"
           :y="center + 6"
           text-anchor="middle"
-          class="select-none fill-slate-900 text-[20px] font-bold"
+          class="select-none fill-slate-900 text-xl font-bold"
         >
           SUN
         </text>
@@ -65,12 +65,8 @@
           class="cursor-pointer"
           @click="$emit('open-selection', { type: 'planet', planet })"
         >
-          <circle :r="planet.size" fill="url(#planetGradient)" class="planet-glow" />
-          <text
-            y="-22"
-            text-anchor="middle"
-            class="select-none fill-slate-100 text-[15px] font-medium"
-          >
+          <circle :r="planet.size" fill="url(#planetGradient)" class="drop-shadow-lg" />
+          <text y="-22" text-anchor="middle" class="select-none fill-slate-100 text-sm font-medium">
             {{ planet.name }}
           </text>
         </g>
@@ -116,13 +112,3 @@ defineEmits<{
   (event: "pointer-leave"): void;
 }>();
 </script>
-
-<style scoped>
-.sun-glow {
-  filter: drop-shadow(0 0 18px rgba(251, 146, 60, 0.7));
-}
-
-.planet-glow {
-  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.55));
-}
-</style>
