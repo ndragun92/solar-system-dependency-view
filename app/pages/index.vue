@@ -472,47 +472,9 @@ const pickUniquePackages = (
   return selectedPackages;
 };
 
-const basePlanets: RawPlanet[] = [
-  {
-    id: "orion",
-    name: "orion-dashboard",
-    orbitRadius: 170,
-    orbitDuration: 18,
-    size: 18,
-    packages: [
-      { name: "@acme/ui", currentVersion: "3.2.1" },
-      { name: "@acme/data", currentVersion: "2.6.0" },
-      { name: "@acme/auth", currentVersion: "1.4.0" },
-    ],
-  },
-  {
-    id: "luna",
-    name: "luna-checkout",
-    orbitRadius: 265,
-    orbitDuration: 26,
-    size: 21,
-    packages: [
-      { name: "@acme/ui", currentVersion: "3.1.0" },
-      { name: "@acme/payments", currentVersion: "2.0.0" },
-      { name: "@acme/analytics", currentVersion: "3.8.2" },
-    ],
-  },
-  {
-    id: "apollo",
-    name: "apollo-insights",
-    orbitRadius: 360,
-    orbitDuration: 34,
-    size: 25,
-    packages: [
-      { name: "@acme/data", currentVersion: "2.8.0" },
-      { name: "@acme/analytics", currentVersion: "4.0.0" },
-    ],
-  },
-];
-
 const random = createSeededRandom(20260323);
 
-const extraPlanets: RawPlanet[] = Array.from({ length: 5 }, (_, index) => {
+const basePlanets: RawPlanet[] = Array.from({ length: 5 }, (_, index) => {
   const packageCount = 2 + Math.floor(random() * 3);
   const selectedPackages = pickUniquePackages(random, packageCount, sunPackages);
 
@@ -529,7 +491,7 @@ const extraPlanets: RawPlanet[] = Array.from({ length: 5 }, (_, index) => {
   };
 });
 
-const rawPlanets: RawPlanet[] = [...basePlanets, ...extraPlanets];
+const rawPlanets: RawPlanet[] = basePlanets;
 
 const orbitLayout = {
   innerRadius: 140,
