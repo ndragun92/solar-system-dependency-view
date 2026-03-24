@@ -1,7 +1,9 @@
 <template>
-  <section class="rounded-2xl border border-slate-800 bg-slate-900/70 p-3 backdrop-blur">
+  <section
+    class="fixed bottom-2 left-2 right-2 w-auto rounded-2xl border border-slate-800 bg-slate-900/70 p-3 backdrop-blur"
+  >
     <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-2">
-      <p class="text-xs uppercase tracking-[0.16em] text-slate-400">Dependency alert stream</p>
+      <p class="text-xs uppercase tracking-[0.16em] text-slate-400">Dependency alert</p>
       <div class="hidden items-center gap-2 md:flex">
         <span class="inline-flex items-center gap-1 text-xs text-rose-300">
           <span class="inline-block h-2 w-2 rounded-full bg-rose-400" /> Major
