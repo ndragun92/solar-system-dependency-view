@@ -241,10 +241,17 @@ export const generateRawPlanets = (
       orbitRadius: 150 + (((index + 3) * 16) % 290),
       orbitDuration: 14 + index * 1.5,
       size: 14 + Math.floor(random() * 10),
-      packages: selectedPackages.map((pkg, pkgIndex) => ({
-        name: pkg.name,
-        currentVersion: downgradeVersion(pkg.latestVersion, random, pkgIndex === 0),
-      })),
+      packages: selectedPackages.map((pkg, pkgIndex) => {
+        const preferLatest = [0, 2].includes(index);
+        const isUpdated = preferLatest ? random() < 0.85 : random() < 0.3;
+
+        return {
+          name: pkg.name,
+          currentVersion: isUpdated
+            ? pkg.latestVersion
+            : downgradeVersion(pkg.latestVersion, random, pkgIndex === 0 && random() < 0.75),
+        };
+      }),
     };
   });
 };

@@ -2,11 +2,11 @@
   <Teleport to="body">
     <div
       v-if="isOpen"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4"
+      class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/75 p-4 sm:items-center"
       @click.self="emit('close')"
     >
       <section
-        class="w-full max-w-2xl rounded-2xl border border-slate-700 bg-slate-900 p-5 shadow-2xl"
+        class="my-4 flex max-h-[calc(100dvh-2rem)] w-full max-w-2xl flex-col rounded-2xl border border-slate-700 bg-slate-900 p-5 shadow-2xl"
         role="dialog"
         aria-modal="true"
         :aria-label="selectedTitle"
@@ -26,7 +26,7 @@
           </button>
         </div>
 
-        <div class="max-h-screen space-y-3 overflow-y-auto text-sm text-slate-200">
+        <div class="min-h-0 flex-1 space-y-3 overflow-y-auto text-sm text-slate-200">
           <template v-if="selected.type === 'sun'">
             <p class="text-slate-300">Available npm packages (latest versions)</p>
             <ul class="space-y-2">
