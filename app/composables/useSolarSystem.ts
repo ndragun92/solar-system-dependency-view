@@ -15,6 +15,13 @@ import {
   type UpgradeCandidate,
 } from "../../shared/utils/solar-system";
 
+type AlertTickerItem = {
+  id: string;
+  label: string;
+  status: Exclude<MoonStatus, "upToDate">;
+  selection: Selection;
+};
+
 export const useSolarSystem = (sourceData: Ref<SolarSystemApiResponse | null>) => {
   const now = ref(Date.now());
   const startTime = now.value;
@@ -202,25 +209,53 @@ export const useSolarSystem = (sourceData: Ref<SolarSystemApiResponse | null>) =
       .slice(0, 6);
   });
 
-  const marqueeItems = computed(() => {
+  const marqueeItems = computed<AlertTickerItem[]>(() => {
+    const combined: AlertTickerItem[] = [];
+
     const criticalRepos = projectHealth.value
       .filter((item) => item.major > 0)
       .sort((a, b) => b.major - a.major)
-      .slice(0, 6)
-      .map((item) => `${item.name}: ${item.major} major update${item.major > 1 ? "s" : ""}`);
+      .slice(0, 6);
+
+    for (const item of criticalRepos) {
+      const planet = planets.value.find((candidate) => candidate.id === item.id);
+      if (!planet) continue;
+
+      combined.push({
+        id: `repo-${item.id}`,
+        label: `${item.name}: ${item.major} major update${item.major > 1 ? "s" : ""}`,
+        status: "majorBehind",
+        selection: { type: "planet", planet },
+      });
+    }
 
     const hotPackages = outdatedPackages.value
       .slice()
       .sort((a, b) => statusPriority[b.status] - statusPriority[a.status])
-      .slice(0, 12)
-      .map(
-        (item) =>
-          `${item.planetName} • ${item.name} ${item.currentVersion} → ${item.latestVersion} (${item.statusLabel})`
-      );
+      .slice(0, 12);
 
-    const combined = [...criticalRepos, ...hotPackages];
+    for (const item of hotPackages) {
+      if (item.status === "upToDate") continue;
+      const planet = planets.value.find((candidate) => candidate.id === item.planetId);
+      if (!planet) continue;
+
+      combined.push({
+        id: `pkg-${item.planetId}-${item.name}`,
+        label: `${item.planetName} • ${item.name} ${item.currentVersion} → ${item.latestVersion} (${item.statusLabel})`,
+        status: item.status,
+        selection: { type: "planet", planet },
+      });
+    }
+
     if (combined.length === 0) {
-      return ["All repositories are up to date. No dependency upgrades required right now."];
+      return [
+        {
+          id: "all-clear",
+          label: "All repositories are up to date. No dependency upgrades required right now.",
+          status: "patchBehind",
+          selection: { type: "sun" },
+        },
+      ];
     }
 
     return combined;

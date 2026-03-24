@@ -9,7 +9,7 @@
         :fleet-health-score="fleetHealthScore"
       />
 
-      <SolarDependencyAlertTicker :items="marqueeItemsLoop" />
+      <SolarDependencyAlertTicker :items="marqueeItemsLoop" @open-selection="openSelection" />
 
       <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <SolarSystemChart

@@ -17,21 +17,35 @@
 
     <div class="ticker mt-2">
       <div class="ticker-track">
-        <span
+        <button
           v-for="(item, index) in items"
-          :key="`${item}-${index}`"
-          class="inline-flex items-center rounded-full border border-slate-700 bg-slate-800/80 px-3 py-1 text-xs text-slate-200"
+          :key="`${item.id}-${index}`"
+          type="button"
+          class="inline-flex items-center rounded-full border px-3 py-1 text-xs transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70"
+          :class="badgeClass(item.status)"
+          @click="emit('open-selection', item.selection)"
         >
-          {{ item }}
-        </span>
+          {{ item.label }}
+        </button>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { badgeClass, type Selection } from "../../../shared/utils/solar-system";
+
 defineProps<{
-  items: string[];
+  items: {
+    id: string;
+    label: string;
+    status: "majorBehind" | "minorBehind" | "patchBehind";
+    selection: Selection;
+  }[];
+}>();
+
+const emit = defineEmits<{
+  (event: "open-selection", payload: Selection): void;
 }>();
 </script>
 
