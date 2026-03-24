@@ -53,7 +53,15 @@
               >
                 <div class="flex items-center justify-between gap-2">
                   <span class="font-medium">{{ pkg.name }}</span>
-                  <span class="rounded-full px-2 py-1 text-xs" :class="badgeClass(pkg.status)">
+                  <span
+                    class="rounded-full px-2 py-1 text-xs"
+                    :class="{
+                      'bg-emerald-500/20 text-emerald-300': pkg.status === 'upToDate',
+                      'bg-cyan-500/20 text-cyan-300': pkg.status === 'patchBehind',
+                      'bg-amber-500/20 text-amber-300': pkg.status === 'minorBehind',
+                      'bg-rose-500/20 text-rose-300': pkg.status === 'majorBehind',
+                    }"
+                  >
                     {{ pkg.statusLabel }}
                   </span>
                 </div>
@@ -72,7 +80,12 @@
               <p class="text-xs text-slate-400">Latest: {{ selected.moon.latestVersion }}</p>
               <span
                 class="mt-3 inline-flex rounded-full px-2 py-1 text-xs"
-                :class="badgeClass(selected.moon.status)"
+                :class="{
+                  'bg-emerald-500/20 text-emerald-300': selected.moon.status === 'upToDate',
+                  'bg-cyan-500/20 text-cyan-300': selected.moon.status === 'patchBehind',
+                  'bg-amber-500/20 text-amber-300': selected.moon.status === 'minorBehind',
+                  'bg-rose-500/20 text-rose-300': selected.moon.status === 'majorBehind',
+                }"
               >
                 {{ selected.moon.statusLabel }}
               </span>
@@ -85,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { badgeClass, type Selection, type SunPackage } from "../../../shared/utils/solar-system";
+import { type Selection, type SunPackage } from "../../../shared/utils/solar-system";
 
 defineProps<{
   isOpen: boolean;
